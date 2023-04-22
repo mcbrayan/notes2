@@ -30,22 +30,4 @@ Route::middleware([
 
 
 
-Route::controller(NoteController::class)->group(function(){
-
-    Route::get('notes', 'index');
-    Route::get('notes', 'store');
-    Route::get('notes', 'edit');
-    Route::get('notes/{note}', 'show');
-
-
-});
-
-Route::controller(FileController::class)->group(function(){
-
-    Route::get('files', 'index');
-    Route::get('files', 'store');
-    Route::get('files', 'edit');
-    Route::get('files/{file}', 'show');
-
-
-});
+Route::resource('note', NoteController::class);
