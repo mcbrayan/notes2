@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter;
 
 class NoteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('admin.notes.index');
+
+        $notes = Note::where('user_id', auth()->user()->id)
+            ->latest('id')
+            ->paginate(10);
+        return view('admin.notes.index', compact('notes'));
     }
 
     /**
@@ -28,7 +32,16 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        return view('admin.notes.store');
+        /* dd($request); */
+        $request->validate([
+            'title' => 'required',
+            'user_id' => 'required|integer',
+            'slug' => 'required|unique:notes'
+        ]);
+        $note = Note::create($request->all());
+
+        return redirect()->route('note.edit', $note)
+            ->with('info', 'La Nota se creó con éxito');
     }
 
     /**
@@ -44,7 +57,7 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
-        return view('admin.notes.edit');
+        return view('admin.notes.edit', compact('note'));
     }
 
     /**
@@ -52,7 +65,14 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'slug' => "required|unique:notes,slug,$note->id"
+        ]);
+        $note->update($request->all());
+
+        return redirect()->route('note.edit', $note)
+            ->with('info', 'la Nota se actualizó con éxito');
     }
 
     /**
@@ -60,6 +80,8 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        $note->delete();
+
+        return redirect()->route('note.index')->with('info', 'la Nota se elimino con éxito');
     }
 }

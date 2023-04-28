@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
+    protected $fillable = ['title', 'slug', 'user_id'];
+
+    public function getRouteKeyName()
+    {
+        return "slug";
+    }
     use HasFactory;
 }
