@@ -45,8 +45,16 @@
 
             </div>
 
+            <div class="form-grup mb-2">
+
+                {!! Form::label('description', 'Descripcion') !!}
+                {!! Form::textarea('description', null, ['class' => 'form-control']) !!}
+
+            </div>
+
+
             {!! Form::submit('Actualizar Nota', [
-                'class' => 'btn btn-primary',
+                'class' => 'btn btn-primary btn-sm',
             ]) !!}
 
             {!! Form::close() !!}
@@ -60,6 +68,7 @@
 
 @section('js')
     <script src="{{ asset('vendor/jQuery-Plugin-stringToSlug-1.3/jquery.stringToSlug.min.js') }}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
 
 
     <script>
@@ -70,5 +79,10 @@
                 space: '-'
             });
         });
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .catch(error => {
+                console.error(error);
+            });
     </script>
 @endsection

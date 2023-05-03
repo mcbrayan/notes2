@@ -6,17 +6,26 @@ use App\Models\Note;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter;
 
 class NoteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
+        $texto = trim($request->get('texto'));
+        /* $note = DB::table('notes')
+            ->select('id', 'title', 'slug', 'description', 'hora')
+            ->where('title', 'LIKE', '%' . $texto . '%')
+            ->orwhere('', 'LIKE', '%' . $texto . '%'); */
+
         $notes = Note::where('user_id', auth()->user()->id)
+            ->where('user_id', 'LIKE', '%' . $texto . '%')
+            ->orwhere('title', 'title', 'description', 'LIKE', '%' . $texto . '%')
             ->latest('id')
             ->paginate(10);
-        return view('admin.notes.index', compact('notes'));
+        return view('admin.notes.index', compact('notes', 'texto'));
     }
 
     /**
@@ -24,6 +33,7 @@ class NoteController extends Controller
      */
     public function create()
     {
+
         return view('admin.notes.create');
     }
 
@@ -65,6 +75,7 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
+        /* dd($request); */
         $request->validate([
             'title' => 'required',
             'slug' => "required|unique:notes,slug,$note->id"
