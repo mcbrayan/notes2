@@ -18,10 +18,9 @@ class FileFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->unique()->sentence();
         return [
-            'name' => $this->faker->image('public/storage/images', 640, 480, null, false),
-            'notes_id' => Note::all()->random()->id,
+            'title' => $this->faker->image('public/storage/images', 640, 480, null, false),
+            'note_id' => Note::all()->random()->id,
         ];
     }
 }

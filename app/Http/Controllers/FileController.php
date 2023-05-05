@@ -58,8 +58,11 @@ class FileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(File $id)
+    public function destroy($id)
     {
-        //
+        $file = File::findOrFail($id);
+        $file->delete();
+
+        return redirect(route('note.index'));
     }
 }

@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
-    protected $fillable = ['title', 'slug', 'user_id', 'description'];
+    protected $fillable = ['title', 'slug', 'user_id', 'description',];
 
     public function getRouteKeyName()
     {
         return "slug";
     }
     use HasFactory;
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
 }

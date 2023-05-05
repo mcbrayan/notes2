@@ -17,7 +17,6 @@
     <div class="card">
         <div class="card-body">
             {!! Form::model($note, ['route' => ['note.update', $note], 'method' => 'put']) !!}
-
             <div class="form-group">
                 {!! Form::label('title', 'Titulo') !!}
                 {!! Form::text('title', null, [
@@ -52,6 +51,26 @@
 
             </div>
 
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="image-wrapper">
+                        @if (count($note->files) > 0)
+                            <img id="picture" src="{{ Storage::url($note->files[0]->title) }}"alt="">
+                        @endif
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        {!! Form::label('file', 'imagen que se mostrara en la nota') !!}
+                        {!! Form::file('file', ['class' => 'form - control - file']) !!}
+                    </div>
+
+
+
+                </div>
+            </div>
+
 
             {!! Form::submit('Actualizar Nota', [
                 'class' => 'btn btn-primary btn-sm',
@@ -60,10 +79,31 @@
             {!! Form::close() !!}
         </div>
     </div>
+    <div>
+        @if (count($note->files) > 0)
+            <form method="POST" action="{{ route('file.destroy', $note->files[0]->id) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+            </form>
+        @endif
+    </div>
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
+    <style>
+        .image-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 @stop
 
 @section('js')

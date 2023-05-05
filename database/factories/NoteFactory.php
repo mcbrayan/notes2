@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use Faker\Provider\ar_EG\Text;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,7 +24,7 @@ class NoteFactory extends Factory
             'user_id' => User::all()->random(),
             'title' => $this->faker->name(),
             'description' => $this->faker->text(),
-            'slug' => Str::slug($name)
+            'slug' => Str::slug($name),
         ];
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Models\Note;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter;
+use Illuminate\Support\Facades\Storage;
+
 
 class NoteController extends Controller
 {
@@ -21,8 +20,8 @@ class NoteController extends Controller
             ->orwhere('', 'LIKE', '%' . $texto . '%'); */
 
         $notes = Note::where('user_id', auth()->user()->id)
-            ->where('user_id', 'LIKE', '%' . $texto . '%')
-            ->orwhere('title', 'title', 'description', 'LIKE', '%' . $texto . '%')
+            ->where('title', 'LIKE', '%' . $texto . '%')
+            ->orwhere('user_id', 'id', 'description', 'LIKE', '%' . $texto . '%')
             ->latest('id')
             ->paginate(10);
         return view('admin.notes.index', compact('notes', 'texto'));
@@ -42,13 +41,25 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        /* dd($request); */
+
         $request->validate([
             'title' => 'required',
             'user_id' => 'required|integer',
-            'slug' => 'required|unique:notes'
+            'slug' => 'required|unique:notes',
+            'file' => 'required'
         ]);
+
         $note = Note::create($request->all());
+
+        if ($request->file('file')) {
+            $url = Storage::put('public/images', $request->file('file'));
+
+            $file = new File();
+            $file->title = $url;
+            $file->note_id = $note->id;
+            $file->save();
+        }
+
 
         return redirect()->route('note.edit', $note)
             ->with('info', 'La Nota se creó con éxito');
@@ -75,10 +86,10 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        /* dd($request); */
         $request->validate([
             'title' => 'required',
-            'slug' => "required|unique:notes,slug,$note->id"
+            'slug' => "required|unique:notes,slug,$note->id",
+            'file' => 'required'
         ]);
         $note->update($request->all());
 

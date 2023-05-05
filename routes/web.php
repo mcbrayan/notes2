@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\NoteController;
+use App\Models\File;
 use App\Models\Note;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +29,5 @@ Route::middleware([
     Route::resource('note', NoteController::class);
     Route::get('/', [NoteController::class, 'index']);
 })->name('note');
+
+Route::resource('file', FileController::class);

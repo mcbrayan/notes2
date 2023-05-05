@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('notes_id');
-            $table->foreign('notes_id')->references('id')->on('notes')->onDelete('cascade');
+            $table->string('title');
+            $table->unsignedBigInteger('note_id');
+            $table->foreign('note_id')->references('id')->on('notes')->onDelete('cascade');
             $table->timestamps();
-
         });
     }
 

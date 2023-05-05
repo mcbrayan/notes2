@@ -317,7 +317,6 @@ return [
             'route'  => 'note.index',
             'icon' => 'fas fa-sticky-note',
         ],
-
     ],
 
     /*

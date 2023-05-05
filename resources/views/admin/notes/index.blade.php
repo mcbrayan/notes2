@@ -21,7 +21,7 @@
     <div class="div-x1-x12">
         <form action="{{ route('note.index') }}" method="GET">
             <div class="form-row">
-                <div class="col-sm-4 my-1">
+                <div class="col-sm-4 my-1 ml-4">
                     <input type="text" class="form-control" name="texto" value="{{ $texto }}">
                 </div>
                 <div class="col-auto my-1 ">
